@@ -1,6 +1,7 @@
 const express = require('express')
 const  app = express()
 const connectDB = require('./db/connect')
+const products = require('./routes/product')
 const errorhandler = require('./middleware/errorhandler')
 const error404 = require('./middleware/error404')
 const port = process.env.PORT || 3000
@@ -15,6 +16,8 @@ app.use(express.json())
 app.get('/',(req, res) =>{
     res.send('<h1>Store API<h1><a href = "api/v1/products"> Product<a/>')
 })
+
+app.use('/api/v1/products', products)
 
 // error 404 
 app.use(error404)
