@@ -3,7 +3,7 @@ const Product = require('../modules/product')
 // test function
 const getAllProductsStatic = async(req, res) =>{
     const search ='ab'
-    const products = await Product.find({ }).sort('name')
+    const products = await Product.find({ }).sort('name').limit(4)
     res.status(200).json({products, nbHits:products.length})
 }
 
@@ -39,11 +39,18 @@ const getAllProducts = async(req, res) =>{
         result = result.sort('createAt')
     }
     
-    // show only selected fields
+    // selected fields
     if(select){
         const selectList = select.split(',').join(' ')
         result = result.select(selectList)
     }
+
+    // page logic
+    const page = Number(req.query.page) || 1
+    const limit = Number (req.query.limit) || 10
+    const skip = (page -1 ) * limit
+    result = result.skip(skip).limit(limit)
+
     const products = await result
 
     console.log(queryObject)
@@ -55,20 +62,4 @@ const getProduct = async(req, res) =>{
     res.status(200).json({msg: ' a product'})
 }
 
-
-const createProduct= async(req, res) =>{
-    
-    res.status(200).json({msg: 'add product'})
-}
-
-const updateProduct= async(req, res) =>{
-    
-    res.status(200).json({msg: 'update product'})
-}
-
-const deleteProduct= async(req, res) =>{
-    
-    res.status(200).json({msg: 'delete product'})
-}
-
-module.exports = { getAllProductsStatic, getAllProducts, getProduct, createProduct, updateProduct, deleteProduct}
+module.exports = { getAllProductsStatic, getAllProducts}
