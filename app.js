@@ -6,13 +6,17 @@ const errorhandler = require('./middleware/errorhandler')
 const error404 = require('./middleware/error404')
 const port = process.env.PORT || 3000
 
+// allow use of .env variables
 require('dotenv').config()
+
+// catch errors
+// package simlar to try-catch method
+require('express-async-errors')
 
 // parse json
 app.use(express.json())
 
 // root
-
 app.get('/',(req, res) =>{
     res.send('<h1>Store API<h1><a href = "api/v1/products"> Product<a/>')
 })
